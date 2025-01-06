@@ -1,7 +1,7 @@
 name = "FNCFunctions"
 uuid = "ab0dfefa-d313-416d-841c-e73335ae36c8"
 authors = ["Toby Driscoll <driscoll@udel.edu>"]
-version = "0.1.0"
+version = "1.0.0"
 
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
