@@ -8,7 +8,7 @@ Use Newton's method to find a root of `f` starting from `x₁`, where
 The optional keyword parameters set the maximum number of iterations
 and the stopping tolerance for values of `f` and changes in `x`.
 """
-function newton(f, df_dx, x₁; maxiter = 40, ftol = 100 * eps(), xtol = 100 * eps())
+function newton(f, df_dx, x₁; maxiter = 40, ftol = 1e-13, xtol = 1e-13)
     x = [float(x₁)]
     y = f(x₁)
     Δx = Inf   # for initial pass below

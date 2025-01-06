@@ -12,7 +12,7 @@ function euler(ivp, n)
     t = [a + i * h for i in 0:n]
 
     # Initial condition and output setup.
-    u = fill(float(ivp.u0), n + 1)
+    u = fill(float(ivp.u0), n+1)
 
     # The time stepping iteration.
     for i in 1:n
@@ -37,7 +37,7 @@ function ie2(ivp, n)
     t = [a + i * h for i in 0:n]
 
     # Initialize output.
-    u = fill(float(ivp.u0), n + 1)
+    u = fill(float(ivp.u0), n+1)
 
     # Time stepping.
     for i in 1:n
@@ -64,7 +64,7 @@ function rk4(ivp, n)
     t = [a + i * h for i in 0:n]
 
     # Initialize output.
-    u = fill(float(ivp.u0), n + 1)
+    u = fill(float(ivp.u0), n+1)
 
     # Time stepping.
     for i in 1:n
@@ -106,8 +106,8 @@ function rk23(ivp, tol)
         # New RK stages.
         s₂ = ivp.f(u[i] + (h / 2) * s₁, ivp.p, t[i] + h / 2)
         s₃ = ivp.f(u[i] + (3h / 4) * s₂, ivp.p, t[i] + 3h / 4)
-        unew3 = u[i] + h * (2s₁ + 3s₂ + 4s₃) / 9   # 3rd order solution
-        s₄ = ivp.f(unew3, ivp.p, t[i] + h)
+        u_new3 = u[i] + h * (2s₁ + 3s₂ + 4s₃) / 9   # 3rd order solution
+        s₄ = ivp.f(u_new3, ivp.p, t[i] + h)
         err = h * (-5s₁ / 72 + s₂ / 12 + s₃ / 9 - s₄ / 8)  # 2nd/3rd difference
         E = norm(err, Inf)                         # error estimate
         maxerr = tol * (1 + norm(u[i], Inf))     # relative/absolute blend
@@ -115,7 +115,7 @@ function rk23(ivp, tol)
         # Accept the proposed step?
         if E < maxerr     # yes
             push!(t, t[i] + h)
-            push!(u, unew3)
+            push!(u, u_new3)
             i += 1
             s₁ = s₄       # use FSAL property
         end
@@ -148,7 +148,7 @@ function ab4(ivp, n)
     σ = [55, -59, 37, -9] / 24
 
     # Find starting values by RK4.
-    u = fill(float(ivp.u0), n + 1)
+    u = fill(float(ivp.u0), n+1)
     rkivp = ODEProblem(ivp.f, ivp.u0, (a, a + (k - 1) * h), ivp.p)
     ts, us = rk4(rkivp, k - 1)
     u[1:k] .= us
@@ -180,7 +180,7 @@ function am2(ivp, n)
     t = [a + i * h for i in 0:n]
 
     # Initialize output.
-    u = fill(float(ivp.u0), n + 1)
+    u = fill(float(ivp.u0), n+1)
 
     # Time stepping.
     for i in 1:n
@@ -188,8 +188,8 @@ function am2(ivp, n)
         known = u[i] + h / 2 * ivp.f(u[i], ivp.p, t[i])
         # Find a root for the new value.
         g = z -> z - h / 2 * ivp.f(z, ivp.p, t[i+1]) - known
-        unew = levenberg(g, known)
-        u[i+1] = unew[end]
+        u_new = levenberg(g, known)
+        u[i+1] = u_new[end]
     end
     return t, u
 end

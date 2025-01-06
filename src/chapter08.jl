@@ -53,8 +53,8 @@ to the Krylov subspace of degree `m`. Returns the orthonormal basis
 """
 function arnoldi(A, u, m)
     n = length(u)
-    Q = zeros(n, m + 1)
-    H = zeros(m + 1, m)
+    Q = zeros(n, m+1)
+    H = zeros(m+1, m)
     Q[:, 1] = u / norm(u)
     for j in 1:m
         # Find the new direction that extends the Krylov subspace.
@@ -82,9 +82,9 @@ residual norms. (This function is for demo only, not practical use.)
 """
 function gmres(A, b, m)
     n = length(b)
-    Q = zeros(n, m + 1)
+    Q = zeros(n, m+1)
     Q[:, 1] = b / norm(b)
-    H = zeros(m + 1, m)
+    H = zeros(m+1, m)
 
     # Initial solution is zero.
     x = 0
@@ -123,7 +123,7 @@ prescribed by λ. For scalar `rcond`, the matrix has condition number
 equal to 1/`rcond`.
 """
 function sprandsym(n, density, rcond::Number)
-    λ = [rcond^(i / (n - 1)) for i in 0:n-1]
+    λ = [rcond^(i / (n-1)) for i in 0:n-1]
     return sprandsym(n, density, λ)
 end
 
@@ -158,7 +158,9 @@ interior lattice.
 """
 function poisson(n)
     D =
-        spdiagm(-1 => fill(-1, n - 1), 0 => fill(2, n), 1 => fill(-1, n - 1)) * (n + 1)^2 /
-        pi^2
+        spdiagm(
+            -1 => fill(-1, n-1),
+            0 => fill(2, n),
+            1 => fill(-1, n-1)) * (n+1)^2 / π^2
     return kron(D, I(n)) + kron(I(n), D)
 end

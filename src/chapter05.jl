@@ -6,7 +6,6 @@ Create a piecewise linear hat function, where `t` is a
 vector of n+1 interpolation nodes and `k` is an integer in 0:n
 giving the index of the node where the hat function equals one.
 """
-
 function hatfun(t, k)
     n = length(t) - 1
     return function (x)
@@ -125,7 +124,7 @@ function fdweights(t, m)
         else                     # generic recursion
             if k < r
                 c =
-                    (t[r+1] * weight(t, m, r - 1, k) - m * weight(t, m - 1, r - 1, k)) /
+                    (t[r+1] * weight(t, m, r-1, k) - m * weight(t, m-1, r-1, k)) /
                     (t[r+1] - t[k+1])
             else
                 numer = r > 1 ? prod(t[r] - x for x in t[1:r-1]) : 1
@@ -133,7 +132,7 @@ function fdweights(t, m)
                 β = numer / denom
                 c =
                     β *
-                    (m * weight(t, m - 1, r - 1, r - 1) - t[r] * weight(t, m, r - 1, r - 1))
+                    (m * weight(t, m - 1, r-1, r-1) - t[r] * weight(t, m, r-1, r-1))
             end
         end
         return c

@@ -11,7 +11,7 @@ function polyinterp(t, y)
     tc = t / C
 
     # Adding one node at a time, compute inverses of the weights.
-    ω = ones(n + 1)
+    ω = ones(n+1)
     for m in 0:n-1
         d = tc[1:m+1] .- tc[m+2]    # vector of node differences
         @. ω[1:m+1] *= d            # update previous
@@ -21,12 +21,13 @@ function polyinterp(t, y)
 
     # This function evaluates the interpolant at given x.
     p = function (x)
-        terms = @. w / (x - t)
-        if any(isinf.(terms))     # there was division by zero
+        Δ = x .- t
+        if any(iszero.(Δ))     # we're at a node exactly
             # return the node's data value
-            idx = findfirst(x .== t)
+            idx = findfirst(iszero.(Δ))
             f = y[idx]
         else
+            terms = w ./ Δ
             f = sum(y .* terms) / sum(terms)
         end
     end
@@ -74,7 +75,7 @@ function ccint(f, n)
 
     # Compute the C-C weights.
     c = similar(θ)
-    c[[1, n + 1]] .= 1 / (n^2 - 1)
+    c[[1, n+1]] .= 1 / (n^2 - 1)
     s = sum(cos.(2k * θ[2:n]) / (4k^2 - 1) for k in 1:n/2-1)
     v = @. 1 - 2s - cos(n * θ[2:n]) / (n^2 - 1)
     c[2:n] = 2v / n

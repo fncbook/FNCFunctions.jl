@@ -45,8 +45,8 @@ function qrfact(A)
         w = [-sign(z[1]) * norm(z) - z[1]; -z[2:end]]
         nrmw = norm(w)
         if nrmw < eps()
-            continue
-        end    # skip this iteration
+            continue    # already in place; skip this iteration
+        end
         v = w / nrmw
         # Apply the reflection to each relevant column of R and Q
         for j in k:n

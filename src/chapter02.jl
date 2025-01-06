@@ -75,15 +75,14 @@ function plufact(A)
     Aₖ = float(copy(A))
 
     # Reduction by outer products
-    for k in 1:n-1
-        p[k] = argmax(abs.(Aₖ[:, k]))
+    for k in 1:n
+        p[k] = argmax(abs.(Aₖ[:, k]))    # best pivot in column k
         U[k, :] = Aₖ[p[k], :]
         L[:, k] = Aₖ[:, k] / U[k, k]
-        Aₖ -= L[:, k] * U[k, :]'
+        if k < n    # no update needed on last iteration
+            Aₖ -= L[:, k] * U[k, :]'
+        end
     end
-    p[n] = argmax(abs.(Aₖ[:, n]))
-    U[n, n] = Aₖ[p[n], n]
-    L[:, n] = Aₖ[:, n] / U[n, n]
     return LowerTriangular(L[p, :]), U, p
 end
 # end plufact

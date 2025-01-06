@@ -8,14 +8,14 @@ end
 
 @testset "Chapter 2" begin
 	A = [ 1 2 3 0; -1 1 2 -1; 3 1 2 4; 1 1 1 1 ]
-	L,U = FNC.lufact(A)
+	L, U = FNC.lufact(A)
 	@test norm(L*U - A) < 100eps()
 	@test norm(U - triu(U)) < 100eps()
 	@test norm(L - tril(L)) < 100eps()
 	b = [1,10,0,-1] / 5;
 	@test norm(L\b - FNC.forwardsub(L,b)) < 100eps()
 	@test norm(U\b - FNC.backsub(U,b)) < 100eps()
-	L,U,p = FNC.plufact(A)
+	L, U, p = FNC.plufact(A)
 	@test norm(L*U - A[p,:]) < 100eps()
 	@test norm(U - triu(U)) < 100eps()
 	@test norm(L - tril(L)) < 100eps()
