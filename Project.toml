@@ -10,8 +10,8 @@ Polynomials = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
-LinearAlgebra = "1.11.0"
+LinearAlgebra = "1"
 OrdinaryDiffEq = "6.90.1"
 Polynomials = "4.0.12"
-SparseArrays = "1.11.0"
+SparseArrays = "1"
 julia = "1"
