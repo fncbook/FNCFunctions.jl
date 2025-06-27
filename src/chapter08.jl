@@ -112,7 +112,7 @@ end
 
 ### These are not part of the text proper, but help to construct
 ### interesting examples.
-
+#COV_EXCL_START
 """
     sprandsym(n, density, λ)
     sprandsym(n, density, rcond)
@@ -164,3 +164,4 @@ function poisson(n)
             1 => fill(-1, n-1)) * (n+1)^2 / π^2
     return kron(D, I(n)) + kron(I(n), D)
 end
+#COV_EXCL_END
