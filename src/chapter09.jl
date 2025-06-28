@@ -44,18 +44,15 @@ vectors `t` and `y`.
 """
 function triginterp(t, y)
     N = length(t)
-
     τ(x) =
-        if x == 0
-            return 1.0
+        if iszero(mod(x, 2))    # prevent 0 / 0
+            1    # L'Hôpital's rule
+        elseif isodd(N)
+            sinpi(N * x / 2) / (N * sinpi(x / 2));
         else
-            denom = isodd(N) ? N * sin(π * x / 2) : N * tan(π * x / 2)
-            return sin(N * π * x / 2) / denom
+            sinpi(N * x / 2) / (N * tanpi(x / 2));
         end
-
-    return function (x)
-        return sum(y[k] * τ(x - t[k]) for k in eachindex(y))
-    end
+    return x -> sum(y[k] * τ(x - t[k]) for k in eachindex(y))
 end
 # end triginterp
 

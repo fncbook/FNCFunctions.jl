@@ -152,17 +152,19 @@ end
 @testset "Chapter 9" begin
 	f = x -> exp(sin(x)+x^2)
 	t = [-cos(k*π/40) for k in 0:40 ]
-	p = FNC.polyinterp(t,f.(t))
-	@test p(-0.12345) ≈ f(-0.12345)
+	p = FNC.polyinterp(t, f.(t))
+	@test all(p(x) ≈ f(x) for x in range(-1, 1, 501))
+	@test p(-1) == f(-1)
 
 	f = x -> exp(sin(π*x))
 	n = 30
 	t = [ 2k/(2n+1) for k in -n:n ]
-	p = FNC.triginterp(t,f.(t))
-	@test p(-0.12345) ≈ f(-0.12345)
+	p = FNC.triginterp(t, f.(t))
+	@test all(p(x) ≈ f(x) for x in range(-1, 1, 501))
+	@test p(0) == f(0)
 	t = [ k/n for k in -n:n-1 ]
 	p = FNC.triginterp(t,f.(t))
-	@test p(-0.12345) ≈ f(-0.12345)
+	@test all(p(x) ≈ f(x) for x in range(-1, 1, 501))
 
 	F = x -> tan(x/2-0.2)
 	f = x -> 0.5*sec(x/2-0.2)^2
