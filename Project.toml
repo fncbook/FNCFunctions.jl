@@ -1,6 +1,6 @@
 name = "FNCFunctions"
 uuid = "ab0dfefa-d313-416d-841c-e73335ae36c8"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Toby Driscoll <driscoll@udel.edu>"]
 
 [deps]
