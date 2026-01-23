@@ -24,7 +24,7 @@ the minimizer of ||b-Ax||.
 """
 function lsqrfact(A, b)
     Q, R = qr(A)
-    c = Q' * b
+    c = Matrix(Q)' * b
     x = backsub(R, c)
     return x
 end
