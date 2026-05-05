@@ -1,6 +1,10 @@
 using FNCFunctions
-using Test
+using Test, Aqua
 using LinearAlgebra, OrdinaryDiffEq
+
+@testset "Code quality" begin
+    Aqua.test_all(FNCFunctions, ambiguities=false)
+end
 
 @testset "Chapter 1" begin
     @test FNC.horner([-1,3,-3,1], 1.6) ≈ 0.6^3
