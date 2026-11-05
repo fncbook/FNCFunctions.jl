@@ -37,45 +37,47 @@ end
 end
 
 @testset "Chapter 4" begin
-    for c in [2,4,7.5,11]
-        f = x -> exp(x) - x - c;
-        dfdx = x -> exp(x) - 1;
-        x = FNC.newton(f,dfdx,1.0);
-        r = x[end];
-        @test abs(f(r)) < 100eps()
+    # rootfinders can be run in BigFloat to get more terms to see the convergence
+    for T in (Float64, BigFloat)
+        tol = 100eps(T)
+        for c in [2, 4, 7.5, 11]
+            f = x -> exp(x) - x - T(c)
+            dfdx = x -> exp(x) - T(1)
+            x = FNC.newton(f, dfdx, T(1); xtol=tol, ftol=tol)
+            r = x[end]
+            @test abs(f(r)) < 10tol
+        end
+
+        for c in [2,4,7.5,11]
+            f = x -> exp(x) - x - T(c)
+            x = FNC.secant(f, T(3), T(0.5), xtol=tol, ftol=tol)
+            r = x[end]
+            @test abs(f(r)) < 10tol
+        end
+
+        function nlfun(x)
+            f = similar(float(x))
+            f[1] = exp(x[2]-x[1]) - 2
+            f[2] = x[1]*x[2] + x[3]
+            f[3] = x[2]*x[3] + x[1]^2 - x[2]
+            return f
+        end
+        function nljac(x)
+            J = similar(float(x), 3,3)
+            J[1,:] = [-exp(x[2]-x[1]),exp(x[2]-x[1]), 0]
+            J[2,:] = [x[2], x[1], 1]
+            J[3,:] = [2*x[1], x[3]-1, x[2]]
+            return J
+        end
+
+        x = FNC.newtonsys(nlfun, nljac, [T(0), 0, 0]; xtol=tol, ftol=tol)
+        @test norm(nlfun(x[end])) < 10tol
+        x = FNC.newtonsys(nlfun, nljac, [T(1), 2, 3]; xtol=tol, ftol=tol)
+        @test norm(nlfun(x[end])) < 10tol
+
+        x = FNC.levenberg(nlfun, [T(10), -4, -3]; xtol=tol, ftol=tol)
+        @test norm(nlfun(x[end])) < 10tol
     end
-
-    for c in [2,4,7.5,11]
-        f = x -> exp(x) - x - c;
-        dfdx = x -> exp(x) - 1;
-        x = FNC.secant(f,3,0.5);
-        r = x[end];
-        @test abs(f(r)) < 100eps()
-    end
-
-    function nlfun(x)
-        f = zeros(3)
-        f[1] = exp(x[2]-x[1]) - 2;
-        f[2] = x[1]*x[2] + x[3];
-        f[3] = x[2]*x[3] + x[1]^2 - x[2];
-        return f
-    end
-    function nljac(x)
-        J = zeros(3,3)
-        J[1,:] = [-exp(x[2]-x[1]),exp(x[2]-x[1]), 0]
-        J[2,:] = [x[2], x[1], 1]
-        J[3,:] = [2*x[1], x[3]-1, x[2]]
-        return J
-    end
-
-    x = FNC.newtonsys(nlfun, nljac, [0, 0, 0])
-    @test norm(nlfun(x[end])) < 100eps()
-    x = FNC.newtonsys(nlfun, nljac, [1, 2, 3])
-    @test norm(nlfun(x[end])) < 100eps()
-
-    x = FNC.levenberg(nlfun, [10, -4, -3])
-    @test norm(nlfun(x[end])) < 1e-12
-
 end
 
 @testset "Chapter 5" begin

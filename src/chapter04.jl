@@ -105,13 +105,13 @@ Compute a finite-difference approximation of the Jacobian matrix for
 `f` at `x₀`, where `y₀`=`f(x₀)` may be given.
 """
 function fdjac(f, x₀, y₀ = f(x₀))
-    δ = sqrt(eps()) * max(norm(x₀), 1)    # near-optimum FD step size
+    δ = sqrt(eps(eltype(x₀))) * max(norm(x₀), 1)    # near-optimum FD step size
     m, n = length(y₀), length(x₀)
     if n == 1
         # Vector result for univariate functions.
         J = (f(x₀ + δ) - y₀) / δ
     else
-        J = zeros(m, n)
+        J = similar(x₀, m, n)
         x = copy(x₀)
         for j in 1:n
             # Difference in the jth direction.
